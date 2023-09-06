@@ -9,14 +9,26 @@ def agname(args = None):
     #   - Enumerate
     #   - Filter
     filelist = generatefilelist(parsedargs.include, set(parsedargs.exclude))
-    for file in filelist:
-        print(file)
     # - Get new filenames
     #   - Take args
     #   - Take filename input
     #   - Create new filename
     # - Apply new filenames
     #   - Run command to rename
+    mapping = {file: process(file) for file in filelist}
+    currenthead = str()
+    for map in mapping:
+        if not parsedargs.dry_run:
+            os.rename(map, mapping[map])
+        oldhead, oldtail = os.path.split(map)
+        if currenthead != oldhead:
+            currenthead = oldhead
+            print(currenthead)
+        newhead, newtail = os.path.split(mapping[map])
+        if currenthead == newhead:
+            print('\t' + oldtail + ' -> ' + newtail)
+        else:
+            print('\t' + oldtail + ' -> ' + mapping[map])
 
 def parseargs(args = None):
     parser = argparse.ArgumentParser(description = 'Rename files using arbitrary rules',
@@ -36,6 +48,9 @@ def parseargs(args = None):
                         action = 'extend', \
                         default = list(), \
                         type = pathexpandglob)
+    parser.add_argument('-d', '--dry-run', \
+                        help = 'do not rename any files, just show the new name', \
+                        action = 'store_true')
     if args == None:
         parsedargs = parser.parse_args()
     else:
@@ -52,12 +67,16 @@ def generatefilelist(include, exclude):
             for e in exclude:
                 dirs[:] = [d for d in dirs if not inpath(os.path.join(root, d), e)]
             filelist.update([os.path.join(root, file) for file in files])
-    return filelist
+    return sorted(list(filelist))
 
 def inpath(patha, pathb):
     if (patha[:len(pathb)]) == pathb:
         return True
     return False
+
+def process(path):
+    head, tail = os.path.split(path)
+    return os.path.join(head, 'aaaa' + tail)
 
 if __name__ == '__main__':
     agname()
