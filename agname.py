@@ -65,14 +65,12 @@ def generatefilelist(include, exclude):
     for inc in include:
         for root, dirs, files in os.walk(inc):
             for e in exclude:
-                dirs[:] = [d for d in dirs if not inpath(os.path.join(root, d), e)]
+                dirs[:] = [d for d in dirs if not indirtree(os.path.join(root, d), e)]
             filelist.update([os.path.join(root, file) for file in files])
     return sorted(list(filelist))
 
-def inpath(patha, pathb):
-    if (patha[:len(pathb)]) == pathb:
-        return True
-    return False
+def indirtree(child, parent):
+    return (os.path.commonpath([child, parent])) == parent
 
 def process(path):
     head, tail = os.path.split(path)
