@@ -1,3 +1,7 @@
+# Currently under initial development
+Do not assume that anything here is ready for use
+You may end up with a bunch of files with a bunch of "a"s prepended to their names
+
 # agname
 Rename files using arbitrary rules
 
