@@ -7,7 +7,7 @@ Rename files using arbitrary rules
 
 # Usage
 ```
-usage: agname.py [-h] [-v] -i INCLUDE [-e EXCLUDE] [-d]
+usage: agname.py [-h] [-v] -i INCLUDE [-e EXCLUDE] -p PROCESSOR [-d]
 
 Rename files using arbitrary rules
 
@@ -18,6 +18,8 @@ options:
                         directories to include (supports expansion, globbing)
   -e EXCLUDE, --exclude EXCLUDE
                         directories to exclude (supports expansion, globbing)
+  -p PROCESSOR, --processor PROCESSOR
+                        which processor to use (e.g. "upper", "lower")
   -d, --dry-run         do not rename any files, just show the new name
 
 This process may be destructive; please backup your files if they are important.
@@ -29,4 +31,13 @@ This process may be destructive; please backup your files if they are important.
 * Use `-e`/`--exclude` to add a directory you would like the program to recursively ignore when walking the directories
   * Supports system globbing/expansion
   * You may use multiple `-e`/`--exclude` options to exclude multiple folders
-* Use `-d`/`--dry-run` to stop the program before it will actually rename your files, allowing you to preview the changes it will make
+* Use `-p`/`--processor` to choose which module to use to process the filenames
+  * Case-sensitive
+  * Must refer to a module in the `processor_modules` folder
+  * You can write your own!
+    * Create a module with a class that extends `processor_modules.processor.Processor`
+    * Place it in the `processor_modules` folder
+    * The `process` function takes and returns fully qualified filepaths
+    * You can use `os.path.split` and `os.path.join` to work with just the file names
+* Use `-d`/`--dry-run` to prevent the program from actually renaming your files, allowing you to preview the changes it will make
+  * Use this in combination with the `nochange` processor to preview the list of files that your `include` and `exclude` parameters

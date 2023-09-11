@@ -1,21 +1,23 @@
 import argparse
 import os.path
 import glob
+import importlib
 
 def agname(args = None):
-    # - Get filenames
-    #   - Take args (-i, -e)
+    # Parse the passed-in arguments
     parsedargs = parseargs(args)
-    #   - Enumerate
-    #   - Filter
+
+    # Generate the list of files to process
     filelist = generatefilelist(parsedargs.include, set(parsedargs.exclude))
-    # - Get new filenames
-    #   - Take args
-    #   - Take filename input
-    #   - Create new filename
-    # - Apply new filenames
-    #   - Run command to rename
-    mapping = {file: process(file) for file in filelist}
+
+    # Import and prepare the processor
+    processormodulename = parsedargs.processor
+    processormodule = importlib.import_module('processor_modules.' + processormodulename)
+    processorinit = getattr(processormodule, parsedargs.processor.capitalize())
+    processorobject = processorinit()
+    
+    # Process the filenames and display the changes
+    mapping = {file: processorobject.process(file) for file in filelist}
     currenthead = str()
     for map in mapping:
         if not parsedargs.dry_run:
@@ -24,11 +26,15 @@ def agname(args = None):
         if currenthead != oldhead:
             currenthead = oldhead
             print(currenthead)
-        newhead, newtail = os.path.split(mapping[map])
-        if currenthead == newhead:
-            print('\t' + oldtail + ' -> ' + newtail)
+        if map == mapping[map]:
+            print('\t' + oldtail)
         else:
-            print('\t' + oldtail + ' -> ' + mapping[map])
+            newhead, newtail = os.path.split(mapping[map])
+            if currenthead == newhead:
+                print('\t' + oldtail + ' -> ' + newtail)
+            else:
+                print('\t' + oldtail + ' -> ' + mapping[map])
+
 
 def parseargs(args = None):
     parser = argparse.ArgumentParser(description = 'Rename files using arbitrary rules',
@@ -48,6 +54,9 @@ def parseargs(args = None):
                         action = 'extend', \
                         default = list(), \
                         type = pathexpandglob)
+    parser.add_argument('-p', '--processor', \
+                        help = 'which processor to use (e.g. "upper", "lower")', \
+                        required = True)
     parser.add_argument('-d', '--dry-run', \
                         help = 'do not rename any files, just show the new name', \
                         action = 'store_true')
@@ -71,10 +80,6 @@ def generatefilelist(include, exclude):
 
 def indirtree(child, parent):
     return (os.path.commonpath([child, parent])) == parent
-
-def process(path):
-    head, tail = os.path.split(path)
-    return os.path.join(head, 'aaaa' + tail)
 
 if __name__ == '__main__':
     agname()
