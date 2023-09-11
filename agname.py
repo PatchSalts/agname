@@ -17,23 +17,25 @@ def agname(args = None):
     processorobject = processorinit()
     
     # Process the filenames and display the changes
-    mapping = {file: processorobject.process(file) for file in filelist}
     currenthead = str()
-    for map in mapping:
+    for file in filelist:
+        newname = processorobject.process(file)
         if not parsedargs.dry_run:
-            os.rename(map, mapping[map])
-        oldhead, oldtail = os.path.split(map)
+            os.renames(file, newname)
+        oldhead, oldtail = os.path.split(file)
         if currenthead != oldhead:
             currenthead = oldhead
             print(currenthead)
-        if map == mapping[map]:
+        if file == newname:
             print('\t' + oldtail)
         else:
-            newhead, newtail = os.path.split(mapping[map])
+            newhead, newtail = os.path.split(newname)
             if currenthead == newhead:
                 print('\t' + oldtail + ' -> ' + newtail)
             else:
-                print('\t' + oldtail + ' -> ' + mapping[map])
+                print('\t' + oldtail + ' -> ' + newname)
+
+
 
 
 def parseargs(args = None):
