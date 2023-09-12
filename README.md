@@ -44,4 +44,4 @@ This process may be destructive; please backup your files if they are important.
     * You can use `os.path.split` and `os.path.join` to work with just the file names
 * Use `-a`/`--arguments` to give arguments to the processor, if it accepts any arguments
 * Use `-d`/`--dry-run` to prevent the program from actually renaming your files, allowing you to preview the changes it will make
-  * Use this in combination with the `nochange` processor to preview the list of files that your `include` and `exclude` parameters
+  * Use this in combination with the `nochange` processor to preview the list of files that your `include` and `exclude` parameters would create
