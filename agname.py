@@ -14,7 +14,7 @@ def agname(args = None):
     processormodulename = parsedargs.processor
     processormodule = importlib.import_module('processor_modules.' + processormodulename)
     processorinit = getattr(processormodule, parsedargs.processor.capitalize())
-    processorobject = processorinit()
+    processorobject = processorinit(parsedargs.arguments)
     
     # Process the filenames and display the changes
     currenthead = str()
@@ -59,6 +59,9 @@ def parseargs(args = None):
     parser.add_argument('-p', '--processor', \
                         help = 'which processor to use (e.g. "upper", "lower")', \
                         required = True)
+    parser.add_argument('-a', '--arguments', \
+                        help = 'arguments to pass to the processor, if it supports them', \
+                        default = str())
     parser.add_argument('-d', '--dry-run', \
                         help = 'do not rename any files, just show the new name', \
                         action = 'store_true')
