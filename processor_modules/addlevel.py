@@ -1,7 +1,7 @@
 import processor_modules.processor
 import os.path
 
-class Addlevel(processor_modules.processor.Processor):
+class AddLevel(processor_modules.processor.Processor):
     def __init__(self, arguments):
         if arguments == str():
             raise ValueError(('this processor requires arguments: '

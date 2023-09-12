@@ -36,7 +36,7 @@ This process may be destructive; please backup your files if they are important.
   * You may use multiple `-e`/`--exclude` options to exclude multiple folders
 * Use `-p`/`--processor` to choose which module to use to process the filenames
   * Case-sensitive
-  * Must refer to a module in the `processor_modules` folder
+  * Must refer to a class from a module in the `processor_modules` folder
   * You can write your own!
     * Create a module with a class that extends `processor_modules.processor.Processor`
     * Place it in the `processor_modules` folder

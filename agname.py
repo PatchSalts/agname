@@ -11,9 +11,9 @@ def agname(args = None):
     filelist = generatefilelist(parsedargs.include, set(parsedargs.exclude))
 
     # Import and prepare the processor
-    processormodulename = parsedargs.processor
+    processormodulename = parsedargs.processor.lower()
     processormodule = importlib.import_module('processor_modules.' + processormodulename)
-    processorinit = getattr(processormodule, parsedargs.processor.capitalize())
+    processorinit = getattr(processormodule, parsedargs.processor)
     processorobject = processorinit(parsedargs.arguments)
     
     # Process the filenames and display the changes
