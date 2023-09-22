@@ -6,6 +6,8 @@ import importlib
 def agname(args = None):
     # Parse the passed-in arguments
     parsedargs = parseargs(args)
+    if parsedargs.dry_run:
+        print("Performing dry run; no files will be renamed")
 
     # Generate the list of files to process
     filelist = generatefilelist(parsedargs.include, set(parsedargs.exclude))
