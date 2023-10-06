@@ -8,13 +8,12 @@ Rename files using arbitrary rules
 
 # Usage
 ```
-usage: agname.py [-h] [-v] -i INCLUDE [-e EXCLUDE] -p PROCESSOR [-a ARGUMENTS] [-d]
+usage: agname.py [-h] -i INCLUDE [-e EXCLUDE] -p PROCESSOR [-a ARGUMENTS] [-d]
 
 Rename files using arbitrary rules
 
 options:
   -h, --help            show this help message and exit
-  -v, --version         show program's version number and exit
   -i INCLUDE, --include INCLUDE
                         directories to include (supports expansion, globbing)
   -e EXCLUDE, --exclude EXCLUDE

@@ -44,9 +44,6 @@ def parseargs(args = None):
     parser = argparse.ArgumentParser(description = 'Rename files using arbitrary rules',
                                      epilog = 'This process may be destructive; \
                                          please backup your files if they are important.')
-    parser.add_argument('-v', '--version', \
-                        action='version', \
-                        version='%(prog)s 0.1.0')
     parser.add_argument('-i', '--include', \
                         help = 'directories to include (supports expansion, globbing)', \
                         action = 'extend', \
